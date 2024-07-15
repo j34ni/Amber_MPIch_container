@@ -16,7 +16,9 @@ Definition file to build Amber (and AmberTools) using a base Ubuntu image with M
 
 With `Amber24.tar.bz2` and `AmberTools24.tar.bz2` in the same folder as `ubuntu2204_mpich421_ucx17_cuda_121_amber24.def` run:
 
- apptainer build image.sif ubuntu2204_mpich421_ucx17_cuda_121_amber24.def
+```
+apptainer build image.sif ubuntu2204_mpich421_ucx17_cuda_121_amber24.def
+```
 
  # Usage (input data in `./data`, outputs in  `./data/outputs`)
  ## on GPU 
