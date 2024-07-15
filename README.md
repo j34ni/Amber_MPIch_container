@@ -1,5 +1,15 @@
 # Amber_MPIch_container
 
+https://zenodo.org/badge/DOI/10.5281/zenodo.12744502.svg
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12744502.svg)](https://doi.org/10.5281/zenodo.12744502)
+
+# Citation
+
+Iaquinta, J. (2024). j34ni/Amber_MPIch_container: Version 1.0.1 (v1.0.1). Zenodo. https://doi.org/10.5281/zenodo.12744502
+
+# description
+
 Definition file to build Amber (and AmberTools) using a base Ubuntu image with MPIch supporting UCX and Cuda 
 
 # Build
