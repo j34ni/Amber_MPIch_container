@@ -1,0 +1,39 @@
+Bootstrap: docker
+From: quay.io/jeani/base_ubuntu_mpich_ucx_cuda:latest
+
+# Authors Jean Iaquinta
+# Contact jeani@uio.no
+# Version v1.0.0
+#
+# This is a definition file to build Amber24 and AmberTools24 using a base container image with Ubuntu22.04 and MPIch4.2.1 (including support for UCX1.17.0 and Cuda12.1.0)
+# It is the responsibility of the user to accept the End User License Agreement and download AmberTools24.tar.bz2 and Amber24.tar.bz2 locally (in the same folder as this .def)
+#
+
+# Update system and install packages needed for Amber
+%post
+    apt-get update -y
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends gromacs libboost-dev libboost-system-dev libboost-thread-dev libbz2-dev libfftw3-dev
+    rm -rf /var/lib/apt/lists/*
+
+# Copying from user local download of AmberTools24.tar.bz2 and Amber24.tar.bz2 (requires accepting EULA)
+%files
+    ./AmberTools24.tar.bz2 /opt/uio/AmberTools24.tar.bz2
+    ./Amber24.tar.bz2 /opt/uio/Amber24.tar.bz2
+
+# Install Amber24 and AmberTools24
+%post
+    tar -x -f /opt/uio/AmberTools24.tar.bz2 -C /opt/uio -j
+    tar -x -f /opt/uio/Amber24.tar.bz2 -C /opt/uio -j
+    cd /opt/uio/amber24_src/build
+    cmake -DCMAKE_INSTALL_PREFIX=/usr/local/amber24 -DCOMPILER=GNU -DMPI=TRUE -DOPENMP=TRUE -DBLA_VENDOR=OpenBLAS -DCUDA=TRUE -DINSTALL_TESTS=FALSE -DDOWNLOAD_MINICONDA=TRUE ..
+    make install
+    rm -rf /opt/uio/AmberTools24.tar.bz2 /opt/uio/Amber24.tar.bz2 /opt/uio/amber24_src
+
+%environment
+    export AMBERHOME=/usr/local/amber24
+    export QUICK_BASIS=/usr/local/amber24/AmberTools/src/quick/basis
+    export PERL5LIB=/usr/local/amber24/lib/perl
+    export PYTHONPATH=/usr/local/amber24/lib/python3.12/site-packages
+    export LD_LIBRARY_PATH=/usr/local/amber24/lib:$LD_LIBRARY_PATH
+    export CPATH=/usr/local/amber24/include:$CPATH
+    export PATH=/usr/local/amber24/bin:$PATH
